@@ -1,0 +1,45 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+.btn-nav{
+  background-color: #8040FF;
+  color:white;
+  font-style: bold;
+  border-radius: 460px;
+  margin-right: 18px;
+}
+.btn-nav:hover{
+  background-color: #712bff;
+  color: white;
+}
+.btn-user {
+  color: #8040FF;
+  background-color: #9866fd7c;
+  font-size: 18px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+.btn-user:hover {
+  background-color: #8040FF;
+  color: white;
+}
+.btn-user i {
+  font-size: 18px;
+  align-items: center;
+}
