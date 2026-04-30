@@ -1,21 +1,12 @@
-import { useEffect,useState } from "react"
-
+import { useEmpresa } from "../../context/EmpresaContext"
+import "./NavBar.css"
 export default function NavBar() {
-
-    const [nombreEmpresa,setNombreEmpresa]= useState('Default Name');
-    useEffect(
-      ()=>{
-        fetch('http://localhost:3000/api/empresa/nombre')
-        .then(res=> res.json())
-        .then(data=>setNombreEmpresa(data.nombre))
-        .catch(err=> console.error('error',err));
-      }
-    ,[])
+  const { nombreEmpresa } = useEmpresa()
 
   return (
     <nav className="navbar navbar-expand-lg ">
       <div className="container-fluid">
-        <a className="navbar-brand" href="/">{nombreEmpresa}</a>
+        <a className="navbar-brand nombreEmpresa " href="/">{nombreEmpresa}</a>
         <button
           className="navbar-toggler"
           type="button"

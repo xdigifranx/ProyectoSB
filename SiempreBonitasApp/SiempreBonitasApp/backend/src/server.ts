@@ -7,11 +7,11 @@ import routes from './routes/index.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3003;
 
 // Middleware
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:5173'
+  origin: process.env.CORS_ORIGIN || ['http://localhost:5173', 'http://localhost:5174']
 }));
 app.use(express.json());
 
@@ -20,7 +20,7 @@ app.use(express.json());
 
 // Rutas
 app.use('/api', routes);
-
+app.use(express.static('public'));
 // Ruta de prueba
 app.get('/', (req, res) => {
   res.json({ message: 'Backend Siempre Bonitas está funcionando' });
