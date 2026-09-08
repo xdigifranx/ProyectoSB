@@ -1,20 +1,29 @@
-import './App.css'
-import "bootstrap-icons/font/bootstrap-icons.css";
-import NavBar from './components/NavBar/NavBar'
-import Main from './components/Main/Main'
-import Footer from './components/Footer/Footer'
-import { EmpresaProvider } from './context/EmpresaContext'
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { EmpresaProvider } from './context/EmpresaContext';
+import AppLayout from './layouts/AppLayout';
+import HomePage from './pages/HomePage';
+import ServiciosPage from './pages/ServiciosPage';
+import PromocionesPage from './pages/PromocionesPage';
+import NosotrosPage from './pages/NosotrosPage';
+import ContactoPage from './pages/ContactoPage';
+import './App.css';
 
 function App() {
   return (
     <EmpresaProvider>
-      <div className="App">
-        <NavBar />
-        <Main />
-        <Footer />
-      </div>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<AppLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="servicios" element={<ServiciosPage />} />
+            <Route path="promociones" element={<PromocionesPage />} />
+            <Route path="nosotros" element={<NosotrosPage />} />
+            <Route path="contacto" element={<ContactoPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </EmpresaProvider>
-  )
+  );
 }
 
-export default App
+export default App;

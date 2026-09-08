@@ -1,32 +1,28 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
-// import { initDatabase } from './database/db.js';
 import routes from './routes/index.js';
-
-dotenv.config();
+import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
 const PORT = process.env.PORT || 3003;
 
-// Middleware
-app.use(cors({
-  origin: process.env.CORS_ORIGIN || ['http://localhost:5173', 'http://localhost:5174']
-}));
+const corsOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',').map((o) => o.trim())
+  : ['http://localhost:5173', 'http://localhost:5174'];
+
+app.use(cors({ origin: corsOrigins }));
 app.use(express.json());
-
-// Inicializar base de datos
-// initDatabase();
-
-// Rutas
-app.use('/api', routes);
 app.use(express.static('public'));
-// Ruta de prueba
-app.get('/', (req, res) => {
+
+app.use('/api', routes);
+
+app.get('/', (_req, res) => {
   res.json({ message: 'Backend Siempre Bonitas está funcionando' });
 });
 
-// Iniciar servidor
+app.use(errorHandler);
+
 app.listen(PORT, () => {
   console.log(`Servidor ejecutándose en puerto ${PORT}`);
 });

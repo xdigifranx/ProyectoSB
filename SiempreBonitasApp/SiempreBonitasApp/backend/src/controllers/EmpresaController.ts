@@ -1,106 +1,47 @@
 import path from 'path';
-import { Request, Response } from 'express';
-import { Empresa } from '../models/Empresa.js';
-import { db } from '../database/db.js';
+import type { Request, Response } from 'express';
+import * as empresaRepo from '../repositories/empresaRepository.js';
 
+const buildAssetUrl = (req: Request, filePath: string) => {
+  const host = req.get('host') || 'localhost:3003';
+  if (filePath.startsWith('http')) return filePath;
+  return `${req.protocol}://${host}/${path.basename(filePath).replace(/\\/g, '/')}`;
+};
 
-export const getNombreEmpresa = (req: Request, res: Response) => {
-    db.get('SELECT valores FROM Enpresa WHERE Descripcion = ?', ['Nombre empresa'], (err, row: Empresa) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
-        if (!row) {
-            res.status(404).json({ error: 'Configuración no encontrada' });
-            return;
-        }
-        res.json({ nombre: row.valores });
-    });
-}
-export const getHeaderImage = (req: Request, res: Response) => {
-    db.get('SELECT valores FROM Enpresa WHERE Descripcion = ?', ['Lugar'], (err, row: Empresa) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
-        if (!row) {
-            res.status(404).json({ error: 'Configuración no encontrada' });
-            return;
-        }
+export const getNombreEmpresa = async (_req: Request, res: Response) => {
+  const valores = await empresaRepo.getConfigValue('Nombre empresa');
+  if (!valores) return res.status(404).json({ error: 'Configuración no encontrada' });
+  res.json({ nombre: valores });
+};
 
-        const imageValue = row.valores;
-        const host = req.get('host') || 'localhost:3003';
-        const imageUrl = imageValue.startsWith('http')
-            ? imageValue
-            : `${req.protocol}://${host}/${path.basename(imageValue).replace(/\\/g, '/')}`;
+export const getHeaderImage = async (req: Request, res: Response) => {
+  const imageValue = await empresaRepo.getConfigValue('Lugar');
+  if (!imageValue) return res.status(404).json({ error: 'Configuración no encontrada' });
+  res.json({ url: buildAssetUrl(req, imageValue) });
+};
 
-        res.json({ url: imageUrl });
-    });};   
+export const getRedesSociales = async (_req: Request, res: Response) => {
+  const redes = await empresaRepo.getRedesSociales();
+  if (redes.length === 0) {
+    return res.status(404).json({ error: 'Configuración no encontrada' });
+  }
+  res.json({ redes });
+};
 
-    export const getRedesSociales = (req: Request, res: Response) => {
-    db.all('SELECT valores,Configuracion FROM Enpresa WHERE Descripcion = ?', ['Redes Sociales'], (err, rows: Empresa[]) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
-        if (!rows || rows.length === 0) {
-            res.status(404).json({ error: 'Configuración no encontrada' });
-            return;
-        }
-        
-        // Devolver array de objetos directamente
-        const redes = rows.map(row => ({
-            url: row.valores,
-            nombre: row.Configuracion
-        }));
-        
-        res.json({ redes });
-    });
-    }
-    export  const getDireccion = (req: Request, res: Response) => {
-    db.get('SELECT valores FROM Enpresa WHERE Descripcion = ?', ['Direccion'], (err, row: Empresa) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
-        if (!row) {
-            res.status(404).json({ error: 'Configuración no encontrada' });
-            return;
-        }
-        res.json({ direccion: row.valores });
-    });
-    };
+export const getDireccion = async (_req: Request, res: Response) => {
+  const valores = await empresaRepo.getConfigValue('Direccion');
+  if (!valores) return res.status(404).json({ error: 'Configuración no encontrada' });
+  res.json({ direccion: valores });
+};
 
-    export const getTelefono = (req: Request, res: Response) => {
-    db.get('SELECT valores FROM Enpresa WHERE Descripcion = ?', ['Telefono'], (err, row: Empresa) => {
-        if (err) {  res.status(500).json({ error: err.message });
-            return;
-        }   
-        else if (!row) {
-            res.status(404).json({ error: 'Configuración no encontrada' });
-            return;
-        }
-        res.json({ telefono: row.valores });
-    });
-    };
-    export const getLogo = (req: Request, res: Response) => {
-    db.get('SELECT valores FROM Enpresa WHERE Descripcion = ?', ['Logo'], (err, row: Empresa) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
-        if (!row) {
-            res.status(404).json({ error: 'Configuración no encontrada' });
-            return;
-        }
-        
-        const logoValue = row.valores;
-        const host = req.get('host') || 'localhost:3003';
-        const logoUrl = logoValue.startsWith('http')
-            ? logoValue
-            : `${req.protocol}://${host}/${path.basename(logoValue).replace(/\\/g, '/')}`;
-        
-        res.json({ url: logoUrl });
-    });
-    };
+export const getTelefono = async (_req: Request, res: Response) => {
+  const valores = await empresaRepo.getConfigValue('Telefono');
+  if (!valores) return res.status(404).json({ error: 'Configuración no encontrada' });
+  res.json({ telefono: valores });
+};
 
+export const getLogo = async (req: Request, res: Response) => {
+  const logoValue = await empresaRepo.getConfigValue('Logo');
+  if (!logoValue) return res.status(404).json({ error: 'Configuración no encontrada' });
+  res.json({ url: buildAssetUrl(req, logoValue) });
+};

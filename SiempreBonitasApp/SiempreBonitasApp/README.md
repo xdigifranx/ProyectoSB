@@ -1,54 +1,88 @@
-# React + TypeScript + Vite
+# Siempre Bonitas App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación web para el salón de belleza **Siempre Bonitas**. Monorepo con frontend en React y backend en Express + SQLite.
 
-Currently, two official plugins are available:
+## Estructura del proyecto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```
+SiempreBonitasApp/
+├── frontend/                 # React + Vite + TypeScript
+│   └── src/
+│       ├── components/
+│       │   ├── layout/       # NavBar, Footer
+│       │   └── home/         # Secciones de la página principal
+│       ├── context/          # Estado global (Empresa)
+│       ├── layouts/          # Layouts compartidos
+│       ├── pages/            # Páginas por ruta
+│       ├── services/         # Llamadas a la API
+│       └── types/            # Tipos TypeScript
+├── backend/                  # Express + SQLite
+│   └── src/
+│       ├── controllers/      # Lógica HTTP
+│       ├── database/         # Conexión SQLite
+│       ├── middleware/       # Manejo de errores
+│       ├── models/           # Tipos de datos
+│       ├── repositories/     # Acceso a base de datos
+│       └── routes/           # Rutas por dominio
+└── package.json              # Scripts del monorepo
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Requisitos
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Node.js >= 16
+- npm
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+## Instalación
+
+```bash
+npm install
 ```
+
+## Configuración
+
+**Backend** — copiá el archivo de entorno:
+
+```bash
+cp backend/.env.example backend/.env
+```
+
+**Frontend** — opcional (tiene valores por defecto):
+
+```bash
+cp frontend/.env.example frontend/.env
+```
+
+## Desarrollo
+
+Levantar frontend y backend a la vez:
+
+```bash
+npm run dev
+```
+
+O por separado:
+
+```bash
+npm run dev:backend   # http://localhost:3003
+npm run dev:frontend  # http://localhost:5173
+```
+
+## Build
+
+```bash
+npm run build
+```
+
+## API
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| GET | `/api/empresa/nombre` | Nombre del salón |
+| GET | `/api/empresa/url` | Imagen del header |
+| GET | `/api/empresa/logo` | Logo |
+| GET | `/api/empresa/direccion` | Dirección |
+| GET | `/api/empresa/telefono` | Teléfono |
+| GET | `/api/empresa/redes` | Redes sociales |
+| GET | `/api/promociones/ruta-imagen` | Promociones |
+| GET | `/api/servicios` | Listado de servicios |
+| GET | `/api/servicios/:id` | Servicio por ID |
