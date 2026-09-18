@@ -20,7 +20,7 @@ const resolveRelativeToBackend = (relativePath: string) => {
 };
 
 if (!dbPath) {
-  dbPath = path.resolve(__dirname, '../../dev.db');
+  dbPath = path.resolve(__dirname, '../../SiempreBonitasApp.db');
 } else if (!path.isAbsolute(dbPath)) {
   dbPath = resolveRelativeToBackend(dbPath);
 }
