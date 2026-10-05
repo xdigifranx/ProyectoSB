@@ -1,11 +1,17 @@
-import { dbAll, dbGet } from '../database/db.js';
+import prisma from '../database/db.js';
 import type { Servicio } from '../models/servicio.js';
 
 export async function getAllServicios(): Promise<Servicio[]> {
-  return dbAll<Servicio>('SELECT * FROM servicios');
+  const servicios = await prisma.servicio.findMany();
+  return servicios as Servicio[]; // Aseguramos que el tipo sea Servicio[]
 }
 
 export async function getServicioById(id: string): Promise<Servicio | null> {
-  const row = await dbGet<Servicio>('SELECT * FROM servicios WHERE id = ?', [id]);
-  return row ?? null;
+  const row = await prisma.servicio.findUnique({
+    where: {
+      id : parseInt(id, 10) // Convertimos el id a número entero
+    }
+  });
+  return row as Servicio | null;
 }
+
