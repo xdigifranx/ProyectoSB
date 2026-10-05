@@ -16,6 +16,6 @@
     "moduleResolution": "nodenext",
     "types": ["node"]
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "prisma.config.js"],
   "exclude": ["node_modules", "dist"]
 }
